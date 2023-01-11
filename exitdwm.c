@@ -22,22 +22,39 @@ void exitdwm ()
 # endif
 
 # define S_LOCK "Lock"
-# define S_RESTART_DWM "restart Dwm"
+# define S_RESTART_DWM "Restart Dwm"
 # define S_OFFSCREEN "Off-screen"
 # define S_EXIT "Exit"
 # define S_REBOOT "Reboot"
 # define S_SHUTDOWN "Shutdown"
 # define S_LOCK_ICON "\uf023"			// <= FontAwesome icons
-# define S_RESTART_DWM_ICON "\uf01e"
-# define S_OFFSCREEN_ICON "\uf108"
-# define S_EXIT_ICON "\uf2f5"
-# define S_REBOOT_ICON "\uf021"
-# define S_SHUTDOWN_ICON "\uf011"
+# define S_RESTART_DWM_ICON ""
+# define S_OFFSCREEN_ICON " "
+# define S_EXIT_ICON ""
+# define S_REBOOT_ICON ""
+# define S_SHUTDOWN_ICON ""
 
 # define S_FORMAT(ACTION) S_##ACTION##_ICON " " S_##ACTION
 # define S_FORMAT_CLEAR "sed 's/^..//'"
 
-	FILE * exit_menu = popen (
+	char dmenu_args[128];
+	memset(dmenu_args, 0, 128);
+
+	int s = 0;
+	const char** elements = dmenucmd + 1;
+	for( ; *elements != NULL; elements++ ) {
+		const char* element = *elements;
+
+		if (strchr(element, '-') != NULL) {
+			s += sprintf(dmenu_args + s, "%s", element);
+		} else {
+			s += sprintf(dmenu_args + s, "\"%s\"", element);
+		}
+
+		*(dmenu_args + s++) = ' ';
+	}
+
+	const char* cursed_string = 
 		"echo \""
 			S_FORMAT (LOCK) "\n"
 			S_FORMAT (RESTART_DWM) "\n"
@@ -45,10 +62,13 @@ void exitdwm ()
 			S_FORMAT (EXIT) "\n"
 			S_FORMAT (REBOOT) "\n"
 			S_FORMAT (SHUTDOWN)
-			"\" | dmenu -p exit: | " S_FORMAT_CLEAR
-		,
-		"r"
-	);
+			"\" | dmenu %s -p Power: | " S_FORMAT_CLEAR;
+
+	char command[256];
+	memset(command, 0, 256);
+	sprintf(command, cursed_string, dmenu_args);
+
+	FILE * exit_menu = popen(command, "r");
 
 	char exit_action [16];
 
