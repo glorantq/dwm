@@ -213,7 +213,15 @@ static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
 static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
-static void movemouse(const Arg *arg);NetWMSticky
+static void movemouse(const Arg *arg);
+static unsigned int nexttag(void);
+static Client *nexttiled(Client *c);
+static void pop(Client *c);
+static unsigned int prevtag(void);
+static void propertynotify(XEvent *e);
+static void quit(const Arg *arg);
+static Monitor *recttomon(int x, int y, int w, int h);
+static void removesystrayicon(Client *i);
 static void resize(Client *c, int x, int y, int w, int h, int interact);
 static void resizebarwin(Monitor *m);
 static void resizeclient(Client *c, int x, int y, int w, int h);
