@@ -28,14 +28,14 @@ void exitdwm ()
 # define S_REBOOT "Reboot"
 # define S_SHUTDOWN "Shutdown"
 # define S_LOCK_ICON "\uf023"			// <= FontAwesome icons
-# define S_RESTART_DWM_ICON ""
+# define S_RESTART_DWM_ICON " "
 # define S_OFFSCREEN_ICON " "
-# define S_EXIT_ICON ""
-# define S_REBOOT_ICON ""
-# define S_SHUTDOWN_ICON ""
+# define S_EXIT_ICON " "
+# define S_REBOOT_ICON " "
+# define S_SHUTDOWN_ICON " "
 
 # define S_FORMAT(ACTION) S_##ACTION##_ICON " " S_##ACTION
-# define S_FORMAT_CLEAR "sed 's/^..//'"
+# define S_FORMAT_CLEAR "sed -r 's/^.\\s+//'"
 
 	char dmenu_args[128];
 	memset(dmenu_args, 0, 128);
